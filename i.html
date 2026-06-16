@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Vila Bianca | Mirë se vini</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: "Inter", sans-serif;
+        background: #faf8f5;
+        color: #222;
+        overflow-x: hidden;
+    }
+
+    /* HERO */
+
+    .hero {
+        position: relative;
+        height: 100vh;
+        min-height: 700px;
+        background:
+            linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.55)),
+            url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2000&auto=format&fit=crop");
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+    }
+
+    .hero-content {
+        width: min(90%, 800px);
+        animation: fadeUp 1s ease;
+    }
+
+    .logo {
+        font-size: clamp(3rem, 8vw, 5rem);
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 700;
+        letter-spacing: 2px;
+    }
+
+    .subtitle {
+        margin-top: 15px;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        opacity: .92;
+    }
+
+    .buttons {
+        margin-top: 35px;
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 15px 32px;
+        border-radius: 50px;
+        border: none;
+        text-decoration: none;
+        font-weight: 600;
+        transition: .3s;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background: white;
+        color: #111;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(0,0,0,.25);
+    }
+
+    .btn-secondary {
+        border: 1px solid rgba(255,255,255,.5);
+        color: white;
+        backdrop-filter: blur(10px);
+        background: rgba(255,255,255,.1);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255,255,255,.2);
+    }
+
+    .scroll {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: bounce 2s infinite;
+        font-size: 1.8rem;
+    }
+
+    /* SECTION */
+
+    section {
+        padding: 90px 8%;
+    }
+
+    .section-title {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .section-title h2 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        color: #222;
+    }
+
+    .section-title p {
+        margin-top: 10px;
+        color: #777;
+    }
+
+    /* GALLERY */
+
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+    }
+
+    .gallery img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 20px;
+        transition: .4s;
+        cursor: pointer;
+    }
+
+    .gallery img:hover {
+        transform: scale(1.03);
+    }
+
+    /* INFO CARDS */
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+        gap: 20px;
+    }
+
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,.05);
+        transition: .3s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .icon {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+
+    .card h3 {
+        margin-bottom: 10px;
+    }
+
+    .menu-cta {
+        background: #1b1b1b;
+        color: white;
+        text-align: center;
+        border-radius: 30px;
+        padding: 70px 20px;
+    }
+
+    .menu-cta h2 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 3rem;
+    }
+
+    .menu-btn {
+        display: inline-block;
+        margin-top: 25px;
+        background: white;
+        color: black;
+        padding: 16px 35px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: .3s;
+    }
+
+    .menu-btn:hover {
+        transform: scale(1.05);
+    }
+
+    footer {
+        padding: 40px;
+        text-align: center;
+        color: #777;
+    }
+
+    /* LIGHTBOX */
+
+    .lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.9);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+    }
+
+    .lightbox img {
+        width: min(90%, 900px);
+        border-radius: 20px;
+    }
+
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes bounce {
+        0%,100% { transform: translate(-50%,0); }
+        50% { transform: translate(-50%,10px); }
+    }
+
+    @media(max-width: 768px){
+        .hero {
+            min-height: 100vh;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+        }
+
+        .menu-cta h2 {
+            font-size: 2.2rem;
+        }
+    }
+</style>
+</head>
+<body>
+
+<header class="hero">
+
+    <div class="hero-content">
+        <h1 class="logo">Vila Bianca</h1>
+
+        <p class="subtitle">
+            Mirë se vini në Vila Bianca në Maminas.
+            Shijoni ambientin elegant, gatimet e veçanta
+            dhe eksperiencën tonë unike.
+        </p>
+
+        <div class="buttons">
+            <a href="#menu" class="btn btn-primary">
+                Shiko Menunë
+            </a>
+
+            <a href="#gallery" class="btn btn-secondary">
+                Ambienti
+            </a>
+        </div>
+    </div>
+
+    <div class="scroll">⌄</div>
+
+</header>
+
+<section id="gallery">
+
+    <div class="section-title">
+        <h2>Ambienti</h2>
+        <p>Disa pamje nga Vila Bianca</p>
+    </div>
+
+    <div class="gallery">
+
+        <!-- Zëvendësoji me fotot e tua -->
+
+        <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1200" alt="">
+        <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1200" alt="">
+        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1200" alt="">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1200" alt="">
+        <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1200" alt="">
+        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1200" alt="">
+
+    </div>
+
+</section>
+
+<section>
+
+    <div class="section-title">
+        <h2>Pse Vila Bianca?</h2>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="icon">🍽️</div>
+            <h3>Kuzhinë Cilësore</h3>
+            <p>Gatime të përgatitura me kujdes dhe përbërës cilësorë.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🌿</div>
+            <h3>Ambient Relaksues</h3>
+            <p>Një hapësirë elegante dhe e qetë për çdo moment.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📍</div>
+            <h3>Maminas</h3>
+            <p>Vendndodhje e përshtatshme dhe lehtësisht e aksesueshme.</p>
+        </div>
+
+    </div>
+
+</section>
+
+<section id="menu">
+
+    <div class="menu-cta">
+
+        <h2>Zbuloni Menunë</h2>
+
+        <p style="margin-top:15px; opacity:.85;">
+            Shfletoni menunë tonë dhe zgjidhni shijet tuaja të preferuara.
+        </p>
+
+        <!-- VENDOS LINKUN E MENUSE KETU -->
+        <a href="menu.html" class="menu-btn">
+            Hap Menunë
+        </a>
+
+    </div>
+
+</section>
+
+<footer>
+    © 2026 Vila Bianca • Maminas
+</footer>
+
+<div class="lightbox" id="lightbox">
+    <img id="lightboxImg">
+</div>
+
+<script>
+
+const images = document.querySelectorAll(".gallery img");
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+
+images.forEach(img => {
+    img.addEventListener("click", () => {
+        lightbox.style.display = "flex";
+        lightboxImg.src = img.src;
+    });
+});
+
+lightbox.addEventListener("click", () => {
+    lightbox.style.display = "none";
+});
+
+</script>
+
+</body>
+</html>
