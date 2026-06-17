@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: "Inter", sans-serif;
+    background: #f7f2ec; 
+    color: #2c1e16;
+}
+
+html { scroll-behavior: smooth; }
+
+/* NAVBAR */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(238, 222, 198, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(139, 105, 80, 0.08);
+}
+
+/* TOP NAV */
+.nav-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px 10px 20px;
+}
+
+.logo {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #3e2723;
+    cursor: pointer;
+}
+
+.lang {
+    display: flex;
+    gap: 8px;
+}
+
+.lang button {
+    border: none;
+    padding: 6px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    background: rgba(139, 105, 80, 0.15);
+    color: #3e2723;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.lang button:hover {
+    background: #FFC94D;
+    color: #111;
+}
+
+/* CATEGORY NAV (Scrollable & Centered if space allows) */
+.nav-bottom {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px 20px 15px 20px;
+    scrollbar-width: none; /* Firefox */
+}
+.nav-bottom::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+.nav-inner {
+    display: flex;
+    gap: 12px;
+    margin: 0 auto; /* E mban në qendër kur ka pak kategori */
+}
+
+.cat {
+    flex: 0 0 auto;
+    padding: 8px 18px;
+    border-radius: 25px;
+    border: 1px solid rgba(139, 105, 80, 0.2);
+    background: rgba(255, 255, 255, 0.4);
+    color: #4a3625;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.35s ease;
+}
+
+.cat:hover {
+    background: rgba(255, 201, 77, 0.3);
+}
+
+.cat.active {
+    background: #FFC94D;
+    color: #2e1e10;
+    border-color: #FFC94D;
+    box-shadow: 0 4px 12px rgba(255, 201, 77, 0.4);
+}
+
+/* MAIN */
+main {
+    padding-top: 130px;
+    padding-bottom: 50px;
+}
+
+/* SECTION */
+.section {
+    padding: 40px 10px 10px 10px;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.section-title h2 {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 2.5rem;
+    color: #2c1e16;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title h2::after {
+    content: "";
+    width: 50px;
+    height: 2px;
+    background: #FFC94D;
+    display: block;
+    margin: 8px auto 0;
+}
+
+/* PRODUCT */
+.product {
+    width: 60%;
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(139, 105, 80, 0.08);
+    border: 1px solid rgba(222, 196, 153, 0.2);
+    transition: 0.3s ease;
+}
+
+.product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(139, 105, 80, 0.15);
+}
+
+.img {
+    width: 100%;
+    aspect-ratio: 4 / 3; 
+    position: relative;
+    background: #e9e3dc; /* Placeholder color kur s'ka imazh */
+}
+
+.img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.price {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: #FFC94D;
+    color: #2e1e10;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.content {
+    padding: 16px 20px;
+    text-align: center;
+}
+
+.content h3 {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 22px;
+    margin-bottom: 6px;
+    color: #2c1e16;
+}
+
+.content p {
+    font-size: 14px;
+    color: #726052;
+    line-height: 1.5;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 25px 15px;
+    background: #1a1612;
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+}
+
+@media (max-width: 768px) {
+    .product {
+        width: 65%;
+        min-width: 250px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="nav-top">
+        <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+            Vila Bianca
+        </div>
+        <div class="lang">
+            <button onclick="changeLang('sq')">🇦🇱</button>
+            <button onclick="changeLang('en')">🇬🇧</button>
+            <button onclick="changeLang('it')">🇮🇹</button>
+        </div>
+    </div>
+    <div class="nav-bottom">
+        <div class="nav-inner" id="navCats"></div>
+    </div>
+</div>
+
+<main id="menu"></main>
+
+<footer>
+    Website created with care for FindFour
+</footer>
+
+<script>
+const categories = [
+    {
+        id: "salads",
+        sq: { title: "Sallata" }, en: { title: "Salads" }, it: { title: "Insalate" },
+        items: [
+            { img: "fotot/salads/sallate me spinaq.png", price: "600 Lek", sq: { name: "Sallatë me spinaq", desc: "" }, en: { name: "Spinach Salad", desc: "" }, it: { name: "Insalata di Spinaci", desc: "" } },
+            { img: "fotot/salads/rukola dhe parmigian.jpg", price: "600 Lek", sq: { name: "Sallatë rukola", desc: "" }, en: { name: "Arugula Salad", desc: "" }, it: { name: "Insalata di Rucola", desc: "" } },
+            { img: "fotot/salads/Kapreze.jpg", price: "550 Lek", sq: { name: "Sallatë kapreze", desc: "" }, en: { name: "Caprese Salad", desc: "" }, it: { name: "Insalata Caprese", desc: "" } },
+            { img: "fotot/salads/sallate cesar.png", price: "600 Lek", sq: { name: "Sallatë Cezar", desc: "" }, en: { name: "Caesar Salad", desc: "" }, it: { name: "Insalata Caesar", desc: "" } },
+            { img: "fotot/salads/sallate fshati.png", price: "400 Lek", sq: { name: "Sallatë fshati", desc: "" }, en: { name: "Village Salad", desc: "" }, it: { name: "Insalata Contadina", desc: "" } },
+            { img: "", price: "450 Lek", sq: { name: "Sallatë greke", desc: "" }, en: { name: "Greek Salad", desc: "" }, it: { name: "Insalata Greca", desc: "" } }
+        ]
+    },
+    {
+        id: "antipasta",
+        sq: { title: "Antipasta" }, en: { title: "Appetizers" }, it: { title: "Antipasti" },
+        items: [
+            { img: "fotot/appetizer/kerpudha te mbushura.jpg", price: "600 Lek", sq: { name: "Kërpudha të mbushura", desc: "" }, en: { name: "Stuffed Mushrooms", desc: "" }, it: { name: "Funghi Ripieni", desc: "" } },
+            { img: "fotot/appetizer/tave me qofte.jpg", price: "600 Lek", sq: { name: "Tavë me qofte", desc: "" }, en: { name: "Meatball Casserole", desc: "" }, it: { name: "Casseruola di Polpette", desc: "" } },
+            { img: "fotot/appetizer/spring rolls.jpg", price: "550 Lek", sq: { name: "Spring Rolls", desc: "" }, en: { name: "Spring Rolls", desc: "" }, it: { name: "Involtini Primavera", desc: "" } },
+            { img: "fotot/appetizer/hamon.jpg", price: "550 Lek", sq: { name: "Hamon", desc: "" }, en: { name: "Jamon", desc: "" }, it: { name: "Prosciutto Crudo (Jamon)", desc: "" } },
+            { img: "fotot/appetizer/patlixhan i tymosur.jpg", price: "500 Lek", sq: { name: "Patëllxhan i tymosur", desc: "" }, en: { name: "Smoked Eggplant", desc: "" }, it: { name: "Melanzane Affumicate", desc: "" } },
+            { img: "fotot/appetizer/mix djathra & proshute e madhe.jpg", price: "1400 Lek", sq: { name: "Mix djathë + proshutë e madhe", desc: "" }, en: { name: "Large Cheese & Ham Mix", desc: "" }, it: { name: "Tagliere Misto Grande (Formaggi e Salumi)", desc: "" } },
+            { img: "fotot/appetizer/mix djathra & proshute e vogel.jpg", price: "800 Lek", sq: { name: "Mix djathë + proshutë e vogël", desc: "" }, en: { name: "Small Cheese & Ham Mix", desc: "" }, it: { name: "Tagliere Misto Piccolo (Formaggi e Salumi)", desc: "" } },
+            { img: "fotot/soups/supa e dites.jpg", price: "400 Lek", sq: { name: "Supë e ditës", desc: "" }, en: { name: "Soup of the Day", desc: "" }, it: { name: "Zuppa del Giorno", desc: "" } }
+        ]
+    },
+    {
+        id: "rizoto",
+        sq: { title: "Rizoto" }, en: { title: "Risotto" }, it: { title: "Risotti" },
+        items: [
+            { img: "fotot/Rozoto/rizoto fruta deti.jpg", price: "800 Lek", sq: { name: "Rizoto fruta deti", desc: "" }, en: { name: "Seafood Risotto", desc: "" }, it: { name: "Risotto ai Frutti di Mare", desc: "" } },
+            { img: "fotot/Rozoto/rizoto fileto pule.jpg", price: "600 Lek", sq: { name: "Rizoto fileto pule", desc: "" }, en: { name: "Chicken Fillet Risotto", desc: "" }, it: { name: "Risotto al Filetto di Pollo", desc: "" } },
+            { img: "fotot/Rozoto/rizoto panxhar mocarela.png", price: "650 Lek", sq: { name: "Rizoto me panxhar dhe mozzarella", desc: "" }, en: { name: "Beetroot & Mozzarella Risotto", desc: "" }, it: { name: "Risotto Barbabietola e Mozzarella", desc: "" } },
+            { img: "fotot/Rozoto/rizoto tartuf kerpudha.jpg", price: "650 Lek", sq: { name: "Rizoto me kërpudha dhe tartuf", desc: "" }, en: { name: "Mushroom & Truffle Risotto", desc: "" }, it: { name: "Risotto Funghi e Tartufo", desc: "" } }
+        ]
+    },
+    {
+        id: "pasta",
+        sq: { title: "Pasta" }, en: { title: "Pasta" }, it: { title: "Primi Piatti" },
+        items: [
+            { img: "fotot/Pasta/linguini fruta deti.jpg", price: "800 Lek", sq: { name: "Linguini fruta deti", desc: "" }, en: { name: "Seafood Linguine", desc: "" }, it: { name: "Linguine ai Frutti di Mare", desc: "" } },
+            { img: "fotot/Pasta/linguini bolonjeze.jpg", price: "700 Lek", sq: { name: "Linguini Bolonjeze", desc: "" }, en: { name: "Bolognese Linguine", desc: "" }, it: { name: "Linguine alla Bolognese", desc: "" } },
+            { img: "fotot/Pasta/pene pana proshute.jpg", price: "650 Lek", sq: { name: "Penne pana proshutë", desc: "" }, en: { name: "Penne Cream & Prosciutto", desc: "" }, it: { name: "Penne Panna e Prosciutto", desc: "" } },
+            { img: "fotot/Pasta/pasta_vici_selino.jpg", price: "900 Lek", sq: { name: "Pjatë me faqe viçi dhe salcë", desc: "" }, en: { name: "Pasta with Beef Cheek & Sauce", desc: "" }, it: { name: "Pasta con Guanciale di Manzo e Salsa", desc: "" } }
+        ]
+    },
+    {
+        id: "mish",
+        sq: { title: "Mish / Grill" }, en: { title: "Meat / Grill" }, it: { title: "Carni / Griglia" },
+        items: [
+            { img: "fotot/meat/kerci qingji.jpg", price: "1300 Lek", sq: { name: "Kërci qingji", desc: "" }, en: { name: "Lamb Chops", desc: "" }, it: { name: "Costolette di Agnello", desc: "" } },
+            { img: "fotot/meat/fileto vici.jpg", price: "1500 Lek", sq: { name: "Fileto viçi", desc: "" }, en: { name: "Beef Fillet", desc: "" }, it: { name: "Filetto di Manzo", desc: "" } },
+            { img: "", price: "2800 Lek / kg", sq: { name: "Mish keci në furrë", desc: "" }, en: { name: "Baked Goat Meat", desc: "" }, it: { name: "Carne di Capretto al Forno", desc: "" } },
+            { img: "", price: "1200 Lek", sq: { name: "Mish qingji", desc: "porcion 350 gr" }, en: { name: "Lamb Meat", desc: "350 gr portion" }, it: { name: "Carne di Agnello", desc: "porzione 350 gr" } },
+            { img: "fotot/meat/berxolle vici.jpg", price: "1000 Lek", sq: { name: "Bërxollë viçi", desc: "" }, en: { name: "Veal Steak", desc: "" }, it: { name: "Bistecca di Vitello", desc: "" } },
+            { img: "", price: "1600 Lek / kg", sq: { name: "Pancet gici", desc: "" }, en: { name: "Pork Pancetta", desc: "" }, it: { name: "Pancetta di Maiale", desc: "" } },
+            { img: "", price: "800 Lek", sq: { name: "Bërxollë gici", desc: "" }, en: { name: "Pork Steak", desc: "" }, it: { name: "Bistecca di Maiale", desc: "" } },
+            { img: "fotot/meat/brinje qingji.jpg", price: "1000 Lek", sq: { name: "Brinjë qingji", desc: "350 gr" }, en: { name: "Lamb Ribs", desc: "350 gr" }, it: { name: "Costine di Agnello", desc: "350 gr" } },
+            { img: "fotot/meat/ribay.jpg", price: "1100 Lek / 100gr", sq: { name: "Ribai (Ribeye)", desc: "" }, en: { name: "Ribeye", desc: "" }, it: { name: "Ribeye", desc: "" } },
+            { img: "", price: "", sq: { name: "Fiorentina", desc: "" }, en: { name: "Florentine Steak", desc: "" }, it: { name: "Bistecca alla Fiorentina", desc: "" } }
+        ]
+    },
+    {
+        id: "garnitura",
+        sq: { title: "Garnitura" }, en: { title: "Side Dishes" }, it: { title: "Contorni" },
+        items: [
+            { img: "", price: "70 Lek / copë", sq: { name: "Kërpudha", desc: "" }, en: { name: "Mushrooms", desc: "" }, it: { name: "Funghi", desc: "" } },
+            { img: "", price: "200 Lek / copë", sq: { name: "Llukanik", desc: "" }, en: { name: "Sausage", desc: "" }, it: { name: "Salsiccia", desc: "" } },
+            { img: "", price: "250 Lek", sq: { name: "Patate", desc: "" }, en: { name: "Potatoes", desc: "" }, it: { name: "Patate", desc: "" } },
+            { img: "", price: "350 Lek", sq: { name: "Turshi", desc: "" }, en: { name: "Pickles", desc: "" }, it: { name: "Sottaceti", desc: "" } },
+            { img: "fotot/traditionals/xaxiki.jpg", price: "300 Lek", sq: { name: "Xaxik", desc: "" }, en: { name: "Tzatziki", desc: "" }, it: { name: "Tzatziki", desc: "" } },
+            { img: "", price: "300 Lek", sq: { name: "Pjatë e bardhë", desc: "" }, en: { name: "White Cheese Plate", desc: "" }, it: { name: "Piatto di Formaggio Bianco", desc: "" } },
+            { img: "", price: "400 Lek", sq: { name: "Pjatë furre", desc: "" }, en: { name: "Baked Cheese Plate", desc: "" }, it: { name: "Piatto di Formaggio al Forno", desc: "" } },
+            { img: "", price: "350 Lek", sq: { name: "Kaçkavall", desc: "" }, en: { name: "Kachkaval Cheese", desc: "" }, it: { name: "Caciocavallo", desc: "" } },
+            { img: "fotot/traditionals/kackavall ne furre.jpg", price: "450 Lek", sq: { name: "Kaçkavall furre", desc: "" }, en: { name: "Baked Kachkaval", desc: "" }, it: { name: "Caciocavallo al Forno", desc: "" } },
+            { img: "fotot/traditionals/fasule pllaqi.jpg", price: "500 Lek", sq: { name: "Fasule pllaqi", desc: "" }, en: { name: "Baked Beans", desc: "" }, it: { name: "Fagioli al Forno", desc: "" } },
+            { img: "fotot/traditionals/tigan me te brendshme qingji.jpg", price: "700 Lek", sq: { name: "Të brendshme qingji", desc: "" }, en: { name: "Lamb Offal", desc: "" }, it: { name: "Frattaglie di Agnello", desc: "" } }
+        ]
+    },
+    {
+        id: "grupe",
+        sq: { title: "Për grupe" }, en: { title: "For Groups" }, it: { title: "Per Gruppi" },
+        items: [
+            { img: "", price: "2000 Lek", sq: { name: "Lakror i madh", desc: "Për 6 persona" }, en: { name: "Large Traditional Pie", desc: "For 6 people" }, it: { name: "Torta Tradizionale Grande", desc: "Per 6 persone" } },
+            { img: "", price: "1300 Lek", sq: { name: "Lakror i vogël", desc: "Për 4 persona" }, en: { name: "Small Traditional Pie", desc: "For 4 people" }, it: { name: "Torta Tradizionale Piccola", desc: "Per 4 persone" } },
+            { img: "", price: "2500 Lek", sq: { name: "Pulë me domate", desc: "" }, en: { name: "Chicken with Tomatoes", desc: "" }, it: { name: "Pollo con Pomodori", desc: "" } }
+        ]
+    },
+    {
+        id: "kafe",
+        sq: { title: "Kafe" }, en: { title: "Coffee" }, it: { title: "Caffetteria" },
+        items: [
+            { img: "", price: "100 Lek", sq: { name: "Ekspres", desc: "" }, en: { name: "Espresso", desc: "" }, it: { name: "Espresso", desc: "" } },
+            { img: "", price: "100 Lek", sq: { name: "Makiato", desc: "" }, en: { name: "Macchiato", desc: "" }, it: { name: "Macchiato", desc: "" } },
+            { img: "", price: "200 Lek", sq: { name: "Kapucino", desc: "" }, en: { name: "Cappuccino", desc: "" }, it: { name: "Cappuccino", desc: "" } },
+            { img: "", price: "200 Lek", sq: { name: "Fredo ekspres", desc: "" }, en: { name: "Freddo Espresso", desc: "" }, it: { name: "Freddo Espresso", desc: "" } },
+            { img: "", price: "300 Lek", sq: { name: "Fredo kapucino", desc: "" }, en: { name: "Freddo Cappuccino", desc: "" }, it: { name: "Freddo Cappuccino", desc: "" } },
+            { img: "", price: "180 Lek", sq: { name: "Frape", desc: "" }, en: { name: "Frappé", desc: "" }, it: { name: "Frappé", desc: "" } },
+            { img: "", price: "90 Lek", sq: { name: "Turke", desc: "" }, en: { name: "Turkish Coffee", desc: "" }, it: { name: "Caffè Turco", desc: "" } }
+        ]
+    },
+    {
+        id: "freskuese",
+        sq: { title: "Pijet freskuese" }, en: { title: "Soft Drinks" }, it: { title: "Bevande Analcoliche" },
+        items: [
+            { img: "", price: "200 Lek", sq: { name: "Coca cola", desc: "" }, en: { name: "Coca Cola", desc: "" }, it: { name: "Coca Cola", desc: "" } },
+            { img: "", price: "200 Lek", sq: { name: "Coca cola 0", desc: "" }, en: { name: "Coca Cola Zero", desc: "" }, it: { name: "Coca Cola Zero", desc: "" } },
+            { img: "", price: "200 Lek", sq: { name: "Fanta", desc: "" }, en: { name: "Fanta", desc: "" }, it: { name: "Fanta", desc: "" } },
+            { img: "", price: "200 Lek", sq: { name: "Ice Tea", desc: "" }, en: { name: "Ice Tea", desc: "" }, it: { name: "Tè Freddo", desc: "" } },
+            { img: "", price: "200 Lek", sq: { name: "B52", desc: "" }, en: { name: "B52 Energy Drink", desc: "" }, it: { name: "B52 Energy Drink", desc: "" } },
+            { img: "", price: "350 Lek", sq: { name: "Red bull", desc: "" }, en: { name: "Red Bull", desc: "" }, it: { name: "Red Bull", desc: "" } },
+            { img: "", price: "200 Lek", sq: { name: "Soda portokall", desc: "" }, en: { name: "Orange Soda", desc: "" }, it: { name: "Soda all'Arancia", desc: "" } },
+            { img: "", price: "200 Lek", sq: { name: "Soda lemon", desc: "" }, en: { name: "Lemon Soda", desc: "" }, it: { name: "Soda al Limone", desc: "" } },
+            { img: "", price: "200 Lek", sq: { name: "Bravo", desc: "" }, en: { name: "Bravo Juice", desc: "" }, it: { name: "Succo Bravo", desc: "" } },
+            { img: "", price: "150 Lek", sq: { name: "Tonic water", desc: "" }, en: { name: "Tonic Water", desc: "" }, it: { name: "Acqua Tonica", desc: "" } },
+            { img: "", price: "100 Lek", sq: { name: "Ujë natyral", desc: "" }, en: { name: "Still Water", desc: "" }, it: { name: "Acqua Naturale", desc: "" } },
+            { img: "", price: "100 Lek", sq: { name: "Ujë me gaz", desc: "" }, en: { name: "Sparkling Water", desc: "" }, it: { name: "Acqua Frizzante", desc: "" } }
+        ]
+    },
+    {
+        id: "birra",
+        sq: { title: "Birra" }, en: { title: "Beers" }, it: { title: "Birre" },
+        items: [
+            { img: "", price: "250 Lek", sq: { name: "Birrë me kriko e vogël", desc: "" }, en: { name: "Draft Beer (Small)", desc: "" }, it: { name: "Birra alla Spina (Piccola)", desc: "" } },
+            { img: "", price: "400 Lek", sq: { name: "Birrë me kriko e madhe", desc: "" }, en: { name: "Draft Beer (Large)", desc: "" }, it: { name: "Birra alla Spina (Grande)", desc: "" } },
+            { img: "", price: "250 Lek", sq: { name: "Korça", desc: "" }, en: { name: "Korça Beer", desc: "" }, it: { name: "Birra Korça", desc: "" } },
+            { img: "", price: "250 Lek", sq: { name: "Tuborg", desc: "" }, en: { name: "Tuborg", desc: "" }, it: { name: "Tuborg", desc: "" } },
+            { img: "", price: "400 Lek", sq: { name: "Paulaner", desc: "" }, en: { name: "Paulaner", desc: "" }, it: { name: "Paulaner", desc: "" } },
+            { img: "", price: "400 Lek", sq: { name: "Corona extra", desc: "" }, en: { name: "Corona Extra", desc: "" }, it: { name: "Corona Extra", desc: "" } }
+        ]
+    },
+    {
+        id: "lengje",
+        sq: { title: "Lëngje bio" }, en: { title: "Fresh Juices" }, it: { title: "Succhi Freschi" },
+        items: [
+            { img: "", price: "400 Lek", sq: { name: "Lëng portokalli", desc: "" }, en: { name: "Fresh Orange Juice", desc: "" }, it: { name: "Spremuta d'Arancia", desc: "" } },
+            { img: "", price: "500 Lek", sq: { name: "Lëng mix", desc: "" }, en: { name: "Mixed Fresh Juice", desc: "" }, it: { name: "Succo Misto Fresco", desc: "" } }
+        ]
+    },
+    {
+        id: "alkolike",
+        sq: { title: "Alkoolike" }, en: { title: "Alcoholic Drinks" }, it: { title: "Bevande Alcoliche" },
+        items: [
+            { img: "", price: "350 Lek", sq: { name: "Disaronno", desc: "" }, en: { name: "Disaronno", desc: "" }, it: { name: "Disaronno", desc: "" } },
+            { img: "", price: "300 Lek", sq: { name: "Red label", desc: "" }, en: { name: "Red Label", desc: "" }, it: { name: "Red Label", desc: "" } },
+            { img: "", price: "500 Lek", sq: { name: "Black label", desc: "" }, en: { name: "Black Label", desc: "" }, it: { name: "Black Label", desc: "" } },
+            { img: "", price: "250 Lek", sq: { name: "Tequila", desc: "" }, en: { name: "Tequila", desc: "" }, it: { name: "Tequila", desc: "" } },
+            { img: "", price: "300 Lek", sq: { name: "Absolute vodka", desc: "" }, en: { name: "Absolute Vodka", desc: "" }, it: { name: "Absolute Vodka", desc: "" } },
+            { img: "", price: "300 Lek", sq: { name: "Martini", desc: "" }, en: { name: "Martini", desc: "" }, it: { name: "Martini", desc: "" } },
+            { img: "", price: "250 Lek", sq: { name: "Ouzo", desc: "" }, en: { name: "Ouzo", desc: "" }, it: { name: "Ouzo", desc: "" } },
+            { img: "", price: "250 Lek", sq: { name: "Raki perle", desc: "" }, en: { name: "Perla Raki", desc: "" }, it: { name: "Raki Perla", desc: "" } },
+            { img: "", price: "100 Lek", sq: { name: "Raki rushi", desc: "" }, en: { name: "Grape Raki", desc: "" }, it: { name: "Raki d'Uva", desc: "" } },
+            { img: "", price: "100 Lek", sq: { name: "Raki kumbulle", desc: "" }, en: { name: "Plum Raki", desc: "" }, it: { name: "Raki di Prugna", desc: "" } },
+            { img: "", price: "250 Lek", sq: { name: "Raki manaferre", desc: "" }, en: { name: "Blackberry Raki", desc: "" }, it: { name: "Raki di Mora", desc: "" } }
+        ]
+    }
+];
+
+let currentLang = localStorage.getItem("lang") || "sq";
+let observer;
+let isClickScrolling = false; 
+
+function renderMenu() {
+    const menu = document.getElementById("menu");
+    const nav = document.getElementById("navCats");
+
+    menu.innerHTML = "";
+    nav.innerHTML = "";
+
+    categories.forEach(c => {
+        nav.innerHTML += `<button class="cat" data-id="${c.id}">${c[currentLang].title}</button>`;
+
+        let itemsHtml = "";
+        c.items.forEach(item => {
+            const priceHtml = item.price.trim() !== "" ? `<div class="price">${item.price}</div>` : "";
+            const descHtml = item[currentLang].desc.trim() !== "" ? `<p>${item[currentLang].desc}</p>` : "";
+            
+            // Nëse nuk ka imazh kthejmë një tag bosh që nuk jep error falë CSS, por jep kutinë placeholder
+            const imgTag = item.img.trim() !== "" 
+                ? `<img src="${item.img}" alt="${item[currentLang].name}" loading="lazy" onerror="this.style.display='none'">` 
+                : '';
+
+            itemsHtml += `
+            <div class="product">
+                <div class="img">
+                    ${imgTag}
+                    ${priceHtml}
+                </div>
+                <div class="content">
+                    <h3>${item[currentLang].name}</h3>
+                    ${descHtml}
+                </div>
+            </div>`;
+        });
+
+        menu.innerHTML += `
+        <section class="section" id="${c.id}">
+            <div class="section-title">
+                <h2>${c[currentLang].title}</h2>
+            </div>
+            ${itemsHtml}
+        </section>`;
+    });
+
+    document.querySelectorAll(".cat").forEach(btn => {
+        btn.onclick = () => {
+            isClickScrolling = true; 
+            document.querySelectorAll(".cat").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            
+            const section = document.getElementById(btn.dataset.id);
+            const y = section.getBoundingClientRect().top + window.scrollY - 110; 
+            window.scrollTo({ top: y, behavior: 'smooth' });
+            
+            btn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+
+            setTimeout(() => { isClickScrolling = false; }, 800);
+        };
+    });
+
+    initObserver();
+}
+
+function initObserver() {
+    if(observer) observer.disconnect();
+
+    const sections = document.querySelectorAll(".section");
+
+    observer = new IntersectionObserver(entries => {
+        if(isClickScrolling) return; 
+
+        entries.forEach(e => {
+            if(e.isIntersecting) {
+                document.querySelectorAll(".cat").forEach(b => b.classList.remove("active"));
+                const btn = document.querySelector(`.cat[data-id="${e.target.id}"]`);
+                if(btn) {
+                    btn.classList.add("active");
+                    btn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+                }
+            }
+        });
+    }, { 
+        threshold: 0.15,
+        rootMargin: "-120px 0px -40% 0px"
+    });
+
+    sections.forEach(s => observer.observe(s));
+}
+
+function changeLang(lang) {
+    currentLang = lang;
+    localStorage.setItem("lang", lang);
+    const scrollPos = window.scrollY; 
+    renderMenu();
+    window.scrollTo(0, scrollPos);
+}
+
+window.onload = () => {
+    renderMenu();
+};
+
+</script>
+</body>
+</html>

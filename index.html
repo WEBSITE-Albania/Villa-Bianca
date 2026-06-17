@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Vila Bianca | Agriturismo & Spa</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+    font-family:"Inter",sans-serif;
+    background:#f7f2ec;
+    color:#1c1c1c;
+}
+
+/* NAV */
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    padding:14px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(20,18,15,.6);
+    backdrop-filter:blur(14px);
+    z-index:1000;
+}
+
+.logo{
+    font-family:"Cormorant Garamond",serif;
+    font-size:22px;
+    color:#fff;
+    cursor:pointer;
+}
+
+.lang{
+    display:flex;
+    gap:8px;
+}
+
+.lang button{
+    border:none;
+    padding:7px 10px;
+    border-radius:20px;
+    cursor:pointer;
+    background:rgba(255,255,255,.12);
+    color:#fff;
+    transition:.3s;
+}
+
+.lang button:hover{
+    background:#FFC94D;
+    color:#111;
+}
+
+/* HERO */
+.hero{
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#fff;
+    background:
+    linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.7)),
+    url("https://lh3.googleusercontent.com/gps-cs-s/APNQkAEnuLe9s7YewLoAXchL8q1s20sl3h74m0VPD2mcUfUUWbSMHTgFbFoT3VsNaKwXy7H7nozKTn8aN9KLW1ir22l4iv20fiuT-_jzyRxaNDGIaZtwVwZvx5L7uFkdMfgmKXhrdjboyiz6oS_l=s1360-w1360-h1020-rw");
+    background-size:cover;
+    background-position:center;
+}
+
+.hero h1{
+    font-family:"Cormorant Garamond",serif;
+    font-size:clamp(2.7rem,6vw,4.3rem);
+}
+
+.hero p{
+    margin-top:14px;
+    opacity:.9;
+    line-height:1.6;
+}
+
+.btns{
+    margin-top:28px;
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:13px 24px;
+    border-radius:40px;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+}
+
+/* GOLD FIXED */
+.primary{
+    background:#FFC94D;
+    color:#111;
+}
+
+.primary:hover{
+    background:#e6b93f;
+    transform:translateY(-3px);
+    box-shadow:0 12px 25px rgba(0,0,0,.15);
+}
+
+.secondary{
+    border:1px solid rgba(255,255,255,.6);
+    color:#fff;
+}
+
+/* SECTION */
+section{
+    padding:70px 7%;
+}
+
+/* TITLE */
+.title{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.title h2{
+    font-family:"Cormorant Garamond",serif;
+    font-size:3rem;
+    position:relative;
+    display:inline-block;
+}
+
+.title h2::after{
+    content:"";
+    width:55px;
+    height:2px;
+    background:#FFC94D;
+    display:block;
+    margin:10px auto 0;
+}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:12px;
+}
+
+.grid img{
+    width:100%;
+    height:230px;
+    object-fit:cover;
+    border-radius:14px;
+    transition:.3s;
+}
+
+.grid img:hover{
+    transform:scale(1.03);
+}
+
+/* FEATURES */
+.features{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:18px;
+}
+
+/* CARD */
+.card{
+    background:linear-gradient(145deg,#ffffff,#f7f1e8);
+    padding:35px 25px;
+    border-radius:22px;
+    text-align:center;
+    box-shadow:0 12px 30px rgba(0,0,0,.06);
+    border:1px solid rgba(255,201,77,.35);
+    transition:.35s ease;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 40px rgba(0,0,0,.10);
+}
+
+/* ICON */
+.icon-badge{
+    width:64px;
+    height:64px;
+    margin:0 auto 18px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    background:rgba(255,201,77,.18);
+    border:1px solid rgba(255,201,77,.35);
+    border-radius:50%;
+}
+
+/* TEXT */
+.card h3{
+    font-family:"Cormorant Garamond",serif;
+    font-size:1.7rem;
+    margin-bottom:10px;
+}
+
+.card p{
+    font-size:14px;
+    opacity:.78;
+    line-height:1.5;
+    margin-bottom:18px;
+}
+
+.card-btn{
+    display:inline-block;
+    padding:10px 16px;
+    border-radius:25px;
+    background:transparent;
+    border:1px solid #FFC94D;
+    color:#1b1b1b;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:600;
+    transition:.25s ease;
+}
+
+.card-btn:hover{
+    background:#FFC94D;
+    border-color:#FFC94D;
+    color:#111;
+    transform:translateY(-2px);
+}
+
+/* FOOTER */
+footer{
+    padding:25px 15px;
+    text-align:center;
+    background:#1a1612;
+    color:rgba(255,255,255,.7);
+    font-size:13px;
+}
+
+/* LIGHTBOX */
+.lightbox{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.9);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+
+.lightbox img{
+    width:min(90%,900px);
+    border-radius:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        Vila Bianca
+    </div>
+
+    <div class="lang">
+        <button onclick="setLang('sq')">🇦🇱</button>
+        <button onclick="setLang('en')">🇬🇧</button>
+        <button onclick="setLang('it')">🇮🇹</button>
+    </div>
+</div>
+
+<header class="hero">
+<div>
+    <h1 id="title"></h1>
+    <p id="subtitle"></p>
+
+    <div class="btns">
+        <a href="menu.html" class="btn primary" id="menuBtn"></a>
+        <a href="#gallery" class="btn secondary" id="galleryBtn"></a>
+    </div>
+</div>
+</header>
+
+<section id="gallery">
+
+<div class="title">
+    <h2 id="gTitle"></h2>
+</div>
+
+<div class="grid">
+<img src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAHf6-imVebzFa2b4vjzyFqUNpmKN6e7y3XAN1nIpqm62QaV95g2jTLow0iMEaMuJldfi_n4YXsbHMl1gvw2zBJc7iyF2wybHedU9RaFwGExt-SBdTszzX-w8KSmR_xzQfzK0FKyfA=s1360-w1360-h1020-rw">
+<img src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAHJCTmYhR4q8MHdBwZx7pwneVJ0dyzHX8WYdMupgKksmqtSPlAC6jtHNbf5RG3BoB6jcio5vqwX-SVHAYC6YlUydZA4ygN33VrXiNO_lZCFapFz99KJF7odDkfzvYmmEyTsYfpc=s1360-w1360-h1020-rw">
+<img src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAF2zl7CqvGytyddITwDO2YcdsdcLJgj2cOZkd9d3s9dwab_DZlqTtOI5KzXUfVa9iQjDPpqDDknpJE8yH1Dyzro7hXtIIQNKRrcedmMr30gLWbvvnhcBa-dXQI5e0uR2bS5xmCz=s1360-w1360-h1020-rw">
+<img src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAFznSOKVpfF-ZzrrAsEB1zN-zouVuLVJnwsuP8JlHFPSsLxAxixPhE4ureSl1cUrnEGgdm1IpGFnbn0JQPtaOvbx07gjCCNVaAGwylp4R5CcQRTVTDKl7txvVLY87JXVuPpqMGkhA=s1360-w1360-h1020-rw">
+</div>
+
+</section>
+
+<section>
+
+<div class="title">
+    <h2 id="why"></h2>
+</div>
+
+<div class="features">
+
+<div class="card">
+<div class="icon-badge">🍽️</div>
+<h3 id="food"></h3>
+<p id="foodText"></p>
+<a class="card-btn" id="foodBtn" href="menu.html"></a>
+</div>
+
+<div class="card">
+<div class="icon-badge">🌿</div>
+<h3 id="spa"></h3>
+<p id="spaText"></p>
+<a class="card-btn" id="spaBtn" href="https://www.booking.com" target="_blank"></a>
+</div>
+
+<div class="card">
+<div class="icon-badge">📍</div>
+<h3 id="loc"></h3>
+<p id="locText"></p>
+<a class="card-btn" id="locBtn" href="https://maps.google.com" target="_blank"></a>
+</div>
+
+</div>
+</section>
+
+<footer>
+Website created with care for Vila Bianca Agriturismo & Spa
+</footer>
+
+<div class="lightbox" id="lightbox">
+<img id="lightboxImg">
+</div>
+
+<script>
+
+const images=document.querySelectorAll(".grid img");
+const lightbox=document.getElementById("lightbox");
+const lightboxImg=document.getElementById("lightboxImg");
+
+images.forEach(img=>{
+    img.onclick=()=>{
+        lightbox.style.display="flex";
+        lightboxImg.src=img.src;
+    }
+});
+
+lightbox.onclick=()=>lightbox.style.display="none";
+
+const data={
+sq:{
+title:"Vila Bianca Agriturismo & Spa",
+subtitle:"Një eksperiencë elegante mes natyrës dhe relaksit premium",
+menuBtn:"Shiko Menunë",
+galleryBtn:"Ambientet",
+gTitle:"Ambientet",
+why:"Pse duhet të na zgjidhni ne",
+food:"Kuzhinë Cilësore",
+foodText:"Gatime të freskëta dhe lokale me shije autentike",
+foodBtn:"Shiko Menunë",
+spa:"Ambient Relaksues",
+spaText:"Qetësi dhe luks në një ambient natyror unik",
+spaBtn:"Rezervo",
+loc:"Vendndodhja",
+locText:"Maminas – afër natyrës dhe qytetit",
+locBtn:"Hap Maps"
+},
+en:{
+title:"Vila Bianca Agriturismo & Spa",
+subtitle:"An elegant experience of nature and premium relaxation",
+menuBtn:"View Menu",
+galleryBtn:"Gallery",
+gTitle:"Spaces",
+why:"Why choose us",
+food:"Quality Cuisine",
+foodText:"Fresh local ingredients",
+foodBtn:"View Menu",
+spa:"Relaxing Area",
+spaText:"Peace and luxury",
+spaBtn:"Book",
+loc:"Location",
+locText:"Maminas – close to nature and city",
+locBtn:"Open Maps"
+},
+it:{
+title:"Vila Bianca Agriturismo & Spa",
+subtitle:"Un'esperienza elegante tra natura e relax premium",
+menuBtn:"Menu",
+galleryBtn:"Ambiente",
+gTitle:"Spazi",
+why:"Perché sceglierci",
+food:"Cucina di qualità",
+foodText:"Ingredienti freschi",
+foodBtn:"Menu",
+spa:"Area Relax",
+spaText:"Relax e lusso",
+spaBtn:"Prenota",
+loc:"Posizione",
+locText:"Maminas – vicino a natura e città",
+locBtn:"Mappa"
+}
+};
+
+function setLang(l){
+document.getElementById("title").innerText=data[l].title;
+document.getElementById("subtitle").innerText=data[l].subtitle;
+document.getElementById("menuBtn").innerText=data[l].menuBtn;
+document.getElementById("galleryBtn").innerText=data[l].galleryBtn;
+document.getElementById("gTitle").innerText=data[l].gTitle;
+document.getElementById("why").innerText=data[l].why;
+
+document.getElementById("food").innerText=data[l].food;
+document.getElementById("foodText").innerText=data[l].foodText;
+document.getElementById("foodBtn").innerText=data[l].foodBtn;
+
+document.getElementById("spa").innerText=data[l].spa;
+document.getElementById("spaText").innerText=data[l].spaText;
+document.getElementById("spaBtn").innerText=data[l].spaBtn;
+
+document.getElementById("loc").innerText=data[l].loc;
+document.getElementById("locText").innerText=data[l].locText;
+document.getElementById("locBtn").innerText=data[l].locBtn;
+}
+
+window.onload=()=>setLang(localStorage.getItem("lang")||"sq");
+
+</script>
+
+</body>
+</html>
