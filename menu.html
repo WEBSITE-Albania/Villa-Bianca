@@ -374,7 +374,7 @@ const categories = [
             { img: "fotot/soft drinks/bravo.jpg", price: "200 Lek", sq: { name: "Bravo", desc: "" }, en: { name: "Bravo Juice", desc: "" }, it: { name: "Succo Bravo", desc: "" } },
             { img: "fotot/soft drinks/tonic water.jpg", price: "150 Lek", sq: { name: "Tonic water", desc: "" }, en: { name: "Tonic Water", desc: "" }, it: { name: "Acqua Tonica", desc: "" } },
             { img: "fotot/soft drinks/uje.jpg", price: "100 Lek", sq: { name: "Ujë natyral", desc: "" }, en: { name: "Still Water", desc: "" }, it: { name: "Acqua Naturale", desc: "" } },
-            { img: "fotot/soft drinks/uje me gaz.jpg", price: "100 Lek", sq: { name: "Ujë me gaz", desc: "" }, en: { name: "Sparkling Water", desc: "" }, it: { name: "Acqua Frizzante", desc: "" } }
+            { img: "fotot/soft drinks/uje.jpg", price: "100 Lek", sq: { name: "Ujë me gaz", desc: "" }, en: { name: "Sparkling Water", desc: "" }, it: { name: "Acqua Frizzante", desc: "" } }
         ]
     },
     {
@@ -416,9 +416,23 @@ const categories = [
     }
 ];
 
-let currentLang = localStorage.getItem("lang") || "sq";
+/* ---------------------------------------------------------------------
+   Language persistence helpers (wrapped in try/catch so a restricted
+   preview environment can never throw and break the whole script —
+   on a normal web host this behaves exactly like plain localStorage).
+--------------------------------------------------------------------- */
+function getStoredLang() {
+    try { return localStorage.getItem("lang"); } catch (e) { return null; }
+}
+function setStoredLang(lang) {
+    try { localStorage.setItem("lang", lang); } catch (e) { /* ignore */ }
+}
+
+let currentLang = getStoredLang() || "sq";
 let observer;
-let isClickScrolling = false; 
+let isClickScrolling = false;
+let clickScrollTimeout = null;
+let scrollScheduled = false;
 
 function renderMenu() {
     const menu = document.getElementById("menu");
@@ -434,7 +448,7 @@ function renderMenu() {
         c.items.forEach(item => {
             const priceHtml = item.price.trim() !== "" ? `<div class="price">${item.price}</div>` : "";
             const descHtml = item[currentLang].desc.trim() !== "" ? `<p>${item[currentLang].desc}</p>` : "";
-            
+
             // Nëse nuk ka imazh kthejmë një tag bosh që nuk jep error falë CSS, por jep kutinë placeholder
             const imgTag = item.img.trim() !== "" 
                 ? `<img src="${item.img}" alt="${item[currentLang].name}" loading="lazy" onerror="this.style.display='none'">` 
@@ -462,54 +476,134 @@ function renderMenu() {
         </section>`;
     });
 
-    document.querySelectorAll(".cat").forEach(btn => {
-        btn.onclick = () => {
-            isClickScrolling = true; 
-            document.querySelectorAll(".cat").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            
-            const section = document.getElementById(btn.dataset.id);
-            const y = section.getBoundingClientRect().top + window.scrollY - 110; 
-            window.scrollTo({ top: y, behavior: 'smooth' });
-            
-            btn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-
-            setTimeout(() => { isClickScrolling = false; }, 800);
-        };
-    });
-
+    attachNavClickHandlers();
     initObserver();
 }
 
-function initObserver() {
-    if(observer) observer.disconnect();
+/* =======================================================================
+   NAVIGATION: smooth-scroll on click + accurate scroll-spy
+   -----------------------------------------------------------------------
+   Strategy: the "active" category is decided by a single source of truth
+   — updateActiveSection() — which looks at the real, current position
+   (getBoundingClientRect) of every section and picks the last one whose
+   top has passed just below the navbar. That decision is triggered both
+   by an IntersectionObserver (cheap, event-driven, the preferred modern
+   approach) AND by a rAF-throttled scroll listener (a tiny safety net
+   that guarantees the activation line can never be "jumped over" during
+   a very fast flick/fling, however short or tall a section is). Because
+   the decision itself is always recomputed from live geometry, neither
+   trigger can produce a wrong/missed result — they only differ in how
+   often they ask the same question.
+======================================================================= */
+
+function getNavbarHeight() {
+    const navbar = document.querySelector(".navbar");
+    return navbar ? navbar.offsetHeight : 110;
+}
+
+function setActiveButton(id) {
+    const btn = document.querySelector(`.cat[data-id="${id}"]`);
+    if (!btn || btn.classList.contains("active")) return; // no-op avoids flicker/extra scrollIntoView calls
+
+    document.querySelectorAll(".cat").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    // Requirement 3: keep the active category visible inside the scrollable navbar
+    btn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+}
+
+function updateActiveSection() {
+    if (isClickScrolling) return; // a click-triggered scroll is animating; don't fight it with intermediate sections
 
     const sections = document.querySelectorAll(".section");
+    if (!sections.length) return;
 
-    observer = new IntersectionObserver(entries => {
-        if(isClickScrolling) return; 
+    const activationLine = getNavbarHeight() + 1; // just below the fixed navbar
 
-        entries.forEach(e => {
-            if(e.isIntersecting) {
-                document.querySelectorAll(".cat").forEach(b => b.classList.remove("active"));
-                const btn = document.querySelector(`.cat[data-id="${e.target.id}"]`);
-                if(btn) {
-                    btn.classList.add("active");
-                    btn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-                }
-            }
-        });
-    }, { 
-        threshold: 0.15,
-        rootMargin: "-120px 0px -40% 0px"
+    let activeId = sections[0].id; // sensible default (top of page / before any section passes the line)
+
+    sections.forEach(section => {
+        if (section.getBoundingClientRect().top <= activationLine) {
+            activeId = section.id; // last section (in document order) that has passed the line wins
+        }
+    });
+
+    setActiveButton(activeId);
+}
+
+function attachNavClickHandlers() {
+    document.querySelectorAll(".cat").forEach(btn => {
+        btn.onclick = () => {
+            const section = document.getElementById(btn.dataset.id);
+            if (!section) return;
+
+            isClickScrolling = true;
+            clearTimeout(clickScrollTimeout);
+            clickScrollTimeout = setTimeout(() => { isClickScrolling = false; }, 1000); // safety net
+
+            setActiveButton(btn.dataset.id); // highlight immediately, don't wait for the animation to finish
+
+            const y = section.getBoundingClientRect().top + window.scrollY - getNavbarHeight();
+            window.scrollTo({ top: y, behavior: "smooth" });
+        };
+    });
+}
+
+function initObserver() {
+    if (observer) observer.disconnect();
+
+    const sections = document.querySelectorAll(".section");
+    const navbarHeight = getNavbarHeight();
+
+    const thresholds = [];
+    for (let i = 0; i <= 20; i++) thresholds.push(i / 20);
+
+    observer = new IntersectionObserver(() => {
+        updateActiveSection();
+    }, {
+        rootMargin: `-${navbarHeight}px 0px 0px 0px`,
+        threshold: thresholds
     });
 
     sections.forEach(s => observer.observe(s));
+
+    // Set the correct initial highlight right away (don't wait for the first scroll/observer tick)
+    updateActiveSection();
 }
+
+// rAF-throttled scroll listener — the accuracy safety net described above
+function onWindowScroll() {
+    if (scrollScheduled) return;
+    scrollScheduled = true;
+    requestAnimationFrame(() => {
+        updateActiveSection();
+        scrollScheduled = false;
+    });
+}
+window.addEventListener("scroll", onWindowScroll, { passive: true });
+
+// Resolve the click-scroll lock as soon as the browser reports the smooth
+// scroll truly finished (supported in modern browsers); the timeout above
+// still covers browsers without 'scrollend'.
+window.addEventListener("scrollend", () => {
+    if (isClickScrolling) {
+        isClickScrolling = false;
+        clearTimeout(clickScrollTimeout);
+        updateActiveSection();
+    }
+});
+
+// Recompute navbar-height-dependent offsets if the viewport changes
+// (e.g. mobile rotation) so the system stays accurate on every device.
+let resizeTimeout;
+window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(initObserver, 200);
+});
 
 function changeLang(lang) {
     currentLang = lang;
-    localStorage.setItem("lang", lang);
+    setStoredLang(lang);
     const scrollPos = window.scrollY; 
     renderMenu();
     window.scrollTo(0, scrollPos);
